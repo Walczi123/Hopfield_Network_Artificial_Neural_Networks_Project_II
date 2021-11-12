@@ -39,13 +39,9 @@ if __name__ == "__main__":
     train_data = data[:-1]
     test_data = data[-1]
 
-    a = np.array([1,2,3])
-    b = np.array([1,2,3])
-    w = np.outer(a, b)
+    nn = HopfieldNetwork(49, 10)
+    nn.train(train_data)
 
-    diagW = np.diag(np.diag(w))
-    # print(diagW)
-    W = w - diagW
-    # print(W)
-    # W = W/3
-    print(W.shape[0])
+    res = nn.predict(test_data)
+    print('test_data', data_to_array(test_data, (7,7)))
+    print('res', data_to_array(res, (7,7)))
