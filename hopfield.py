@@ -1,9 +1,10 @@
 import numpy as np
 
 class HopfieldNetwork():     
-    def __init__(self, neuron_num):
+    def __init__(self, neuron_num, num_iter):
         self.neuron_num = neuron_num
-        self.weights = np.empty(10)
+        self.weights = np.empty(self.neuron_num)
+        self.num_iter = num_iter
 
     def train(self, train_data):
         for data in train_data:
@@ -14,27 +15,21 @@ class HopfieldNetwork():
             self.weights = self.weights + w
 
     def predict(self, data):
+        # return np.sign(self.weights @ data)
         return self.sync_predict(data)
 
     def energy(self, state):
-        return
+        return  -0.5*np.matmul(np.matmul(state, self.weights), state)
 
     def sync_predict(self, data):
-        # Compute initial state energy
-        state = data
-        e = self.energy(state)
-        
-        # Iteration
+        tmp = data
+        e = self.energy(tmp)
+
         for i in range(self.num_iter):
-            # Update s
-            tmp = np.sign(self.W @ tmp - self.threshold)
-            # Compute new state energy
+            tmp = np.sign(self.weights @ tmp)
             e_new = self.energy(tmp)
-            
-            # s is converged
             if e == e_new:
                 return tmp
-            # Update energy
             e = e_new
         return tmp
 
