@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib import pyplot as plt
+import time
 
 
 def reshape(data):
@@ -35,5 +36,6 @@ def plot(data, test, predicted, figsize=(5, 6)):
             axarr[i, 2].axis('off')
 
     plt.tight_layout()
-    plt.savefig("result.png")
+    timestr = time.strftime("%d_%m_%Y-%H_%M-%S")
+    plt.savefig(f"result/result-{timestr}.png")
     plt.show()
