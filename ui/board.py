@@ -20,7 +20,7 @@ class Board:
         self.window.resizable(width=self.size, height=self.size)
         self.window.minsize(self.size, int(3/4*self.size))
         Grid.rowconfigure(self.window, 0, weight=1)
-        Grid.columnconfigure(self.window, 0, weight=3)
+        Grid.columnconfigure(self.window, 0, weight=1)
 
     def prepare_controls(self):
         self.buttons = []
@@ -40,10 +40,17 @@ class Board:
             self.buttons.append(buttons_row)
 
     def prepare_config_panel(self):
-        Grid.rowconfigure(self.window, 0, weight=1)
-        Grid.columnconfigure(self.window, 1, weight=1)
-        frame = Frame(self.window, width=100)
-        frame.grid(row=0, column=2, sticky=N+S+E+W)
+        frame = Frame(self.window)
+        frame.grid(row=0, column=1, sticky=N+S+E+W, padx=5, pady=5)
+        Grid.rowconfigure(frame, 0, weight=1)
+        Grid.columnconfigure(frame,0, weight=1)
+
+        self.next_iter_btn = Button(frame,text='Next', highlightbackground='gray', background="gray",activebackground="gray",activeforeground="gray",
+                command=lambda : self.next_iteration_handler())
+        self.next_iter_btn.grid(row=0, column=0, sticky=E+W)
+    
+    def next_iteration_handler(self):
+        pass
 
     def button_handler(self, row: int, col: int):
         self.window.update()
