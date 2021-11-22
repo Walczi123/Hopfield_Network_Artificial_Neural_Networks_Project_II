@@ -19,9 +19,10 @@ def data_to_array(data, size):
 def array_to_vector(array):
     return np.reshape(np.array(array), -1)
 
-def disturb_data(vec, c = 0, step = 0):
+def disturb_data(vec, num=10):
     vec_d= vec[:]
-    for idx in range(c,len(vec_d), step):
+    selected = np.random.choice(len(vec), num, replace=False)
+    for idx in selected:
         vec_d[idx] = -vec_d[idx]
     return vec_d
     
