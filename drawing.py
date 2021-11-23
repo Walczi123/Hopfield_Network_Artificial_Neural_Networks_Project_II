@@ -21,8 +21,8 @@ def plot(data, test, predicted, figsize=(5, 6), size=None):
         predicted = [reshape(d) for d in predicted]
     else:
         data = [np.reshape(d, (size)) for d in data]
-        test = [np.reshape(d, (size)) for d in data]
-        predicted = [np.reshape(d, (size)) for d in data]
+        test = [np.reshape(d, (size)) for d in test]
+        predicted = [np.reshape(d, (size)) for d in predicted]
 
     fig, axarr = plt.subplots(len(data), 3, figsize=figsize)
     if len(data) == 1:
