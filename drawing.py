@@ -11,29 +11,45 @@ def reshape(data):
     return data
 
 
-def plot(data, test, predicted, figsize=(5, 6)):
+def plot(data, test, predicted, figsize=(5, 6), size=None):
     data = np.atleast_2d(data)
     test = np.atleast_2d(test)
     predicted = np.atleast_2d(predicted)
-    data = [reshape(d) for d in data]
-    test = [reshape(d) for d in test]
-    predicted = [reshape(d) for d in predicted]
+    if size is None:
+        data = [reshape(d) for d in data]
+        test = [reshape(d) for d in test]
+        predicted = [reshape(d) for d in predicted]
+    else:
+        data = [np.reshape(d, (size)) for d in data]
+        test = [np.reshape(d, (size)) for d in data]
+        predicted = [np.reshape(d, (size)) for d in data]
 
     fig, axarr = plt.subplots(len(data), 3, figsize=figsize)
-    for i in range(max(len(data), len(test), len(predicted))):
-        if i == 0:
-            axarr[i, 0].set_title('Train data')
-            axarr[i, 1].set_title("Input data")
-            axarr[i, 2].set_title('Output data')
-        if len(data) > i:
-            axarr[i, 0].imshow(data[i], cmap='gray_r')
-            axarr[i, 0].axis('off')
-        if len(test) > i:
-            axarr[i, 1].imshow(test[i], cmap='gray_r')
-            axarr[i, 1].axis('off')
-        if len(predicted) > i:
-            axarr[i, 2].imshow(predicted[i], cmap='gray_r')
-            axarr[i, 2].axis('off')
+    if len(data) == 1:
+        axarr[0].set_title('Train data')
+        axarr[1].set_title("Input data")
+        axarr[2].set_title('Output data')
+        axarr[0].imshow(data[0], cmap='gray_r')
+        axarr[0].axis('off')
+        axarr[1].imshow(test[0], cmap='gray_r')
+        axarr[1].axis('off')
+        axarr[2].imshow(predicted[0], cmap='gray_r')
+        axarr[2].axis('off')
+    else:
+        for i in range(max(len(data), len(test), len(predicted))):
+            if i == 0:
+                axarr[i, 0].set_title('Train data')
+                axarr[i, 1].set_title("Input data")
+                axarr[i, 2].set_title('Output data')
+            if len(data) > i:
+                axarr[i, 0].imshow(data[i], cmap='gray_r')
+                axarr[i, 0].axis('off')
+            if len(test) > i:
+                axarr[i, 1].imshow(test[i], cmap='gray_r')
+                axarr[i, 1].axis('off')
+            if len(predicted) > i:
+                axarr[i, 2].imshow(predicted[i], cmap='gray_r')
+                axarr[i, 2].axis('off')
 
     plt.tight_layout()
     timestr = time.strftime("%d_%m_%Y-%H_%M-%S")
