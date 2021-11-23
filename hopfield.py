@@ -1,4 +1,5 @@
 import numpy as np
+from common.common_functions import vector_deep_copy
 
 class HopfieldNetwork():     
     def __init__(self, neuron_num):
@@ -23,7 +24,7 @@ class HopfieldNetwork():
         return  -0.5*np.matmul(np.matmul(state, self.weights), state)
 
     def sync_predict(self, data, num_iter):
-        tmp = data
+        tmp = vector_deep_copy(data)
         e = self.energy(tmp)
 
         for i in range(num_iter):
@@ -35,7 +36,7 @@ class HopfieldNetwork():
         return tmp
 
     def async_predict(self, data, num_iter, async_iter):
-        tmp = data
+        tmp = vector_deep_copy(data)
         e = self.energy(tmp)
         for i in range(async_iter):
             for j in range(100):

@@ -50,9 +50,12 @@ def array_to_vector(array):
     return np.reshape(np.array(array), -1)
 
 def disturb_data(vec, num=10):
-    vec_d= vec[:]
+    vec_d= vector_deep_copy(vec)
     selected = np.random.choice(len(vec), num, replace=False)
     for idx in selected:
         vec_d[idx] = -vec_d[idx]
     return vec_d
+
+def vector_deep_copy(vec):
+    return [x for x in vec]
     
