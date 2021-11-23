@@ -3,7 +3,7 @@ import pandas as pd
 
 def read_data_as_vectors(path):
     try:
-        return pd.read_csv(path).values.tolist()
+        return pd.read_csv(path, header=None).values.tolist()
     except:
         raise FileNotFoundError('Could not find the file')
 
