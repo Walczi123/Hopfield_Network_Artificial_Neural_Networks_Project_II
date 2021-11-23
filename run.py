@@ -6,15 +6,18 @@ from drawing import plot
 from ui.board import *
 
 if __name__ == "__main__":
-    STANDARD = True
-    USE_ASYNC = False
-    DISTURBED = 200
-    ITER = 1000
-    ASYNC_ITER = 1000
-    PATHS = ['./data/sets/small-7x7.csv', './data/sets/large-25x25.csv','./data/big_set/ptak1.jpeg']
-    NEURONS = [49, 625, None]
-    IDX=1
-    STANDARD_TO_OMMIT = [] # INDICES OF ELEMENTS THAT SHOULD NOT BE TAKEN INTO ACCOUNT
+    STANDARD = True # DETERMINES IF THE IMAGES (False) OR STANDARD DATASETS (True) SHOULD BE PROCESSED
+    USE_ASYNC = False # DETERMINES IF ASYNC PREDICT SHOULD BE USED
+    DISTURBED = 10 # NUMBER OF PIXELS THAT SHOULD BE DISTURBED IN TEST IMAGES
+    ITER = 100 # NUMBER OF ITERATIONS IN PREDICT
+    ASYNC_ITER = 1000 # NUMBER OF ITERATIONS IN ASYNC PREDICT
+    PATHS = ['./data/sets/small-7x7.csv', './data/sets/large-25x25.csv','./data/big_set/ptak1.jpeg'] # PATHS TO IMAGES
+    NEURONS = [49, 625, None] # NUMBER OF NEURONS FOR IMAGES ( SHOULD BE SET APPROPRIATELY TO CORRESPONDING PATH IN PATHS)
+    IDX=0 # INDEX OF ELEMENTS IN PATHS AND NEURONS THAT WILL BE USED
+    STANDARD_TO_OMMIT = [2] # INDICES OF ELEMENTS THAT SHOULD NOT BE TAKEN INTO ACCOUNT
+    OJA_LEARNING = False # DETERMINES IF OJA LEARNING SHOULD BE USED
+    OJA_ITER = 100 # NUMBER OF ITERATIONS IN OJA LEARNING
+    OJA_N = 0.001 # LEARNING COEFFICIENT IN OJA LEARNING
     if STANDARD:
         seed = 1
         ommit = STANDARD_TO_OMMIT
@@ -23,8 +26,6 @@ if __name__ == "__main__":
         ommit.sort(reverse=True)
         for idx in ommit:
             del data[idx]
-        # train_data = data[:-1]
-        # test_data = data[-1]
         train_data = data[:]
         test_data = []
 
@@ -36,6 +37,9 @@ if __name__ == "__main__":
 
         nn = HopfieldNetwork(NEURONS[IDX])
         nn.train(train_data)
+        if OJA_LEARNING:
+            nn.train_oja(train_data,OJA_ITER, OJA_N)
+
         res = []
         for pattern in test_data:
             res.append(nn.predict(pattern, ITER, use_async=USE_ASYNC, async_iter=ASYNC_ITER))
@@ -48,6 +52,8 @@ if __name__ == "__main__":
 
         nn = HopfieldNetwork(len(data))
         nn.train([data])
+        if OJA_LEARNING:
+            nn.train_oja([data],OJA_ITER, OJA_N)
 
         res = []
         test = disturb_data(data, DISTURBED)
