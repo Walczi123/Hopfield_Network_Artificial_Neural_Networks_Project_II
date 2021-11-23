@@ -1,10 +1,9 @@
 import numpy as np
 
 class HopfieldNetwork():     
-    def __init__(self, neuron_num, num_iter):
+    def __init__(self, neuron_num):
         self.neuron_num = neuron_num
         self.weights = np.empty(self.neuron_num)
-        self.num_iter = num_iter
 
     def train(self, train_data):
         for data in train_data:
@@ -14,18 +13,20 @@ class HopfieldNetwork():
             w = w / w.shape[0]
             self.weights = self.weights + w
 
-    def predict(self, data):
-        # return np.sign(self.weights @ data)
-        return self.sync_predict(data)
+    def predict(self, data, num_iter, use_async = False, async_iter = 100):
+        if use_async:
+            return self.sync_predict(data, num_iter)
+        else:
+            return self.async_predict(data, num_iter, async_iter)
 
     def energy(self, state):
         return  -0.5*np.matmul(np.matmul(state, self.weights), state)
 
-    def sync_predict(self, data):
+    def sync_predict(self, data, num_iter):
         tmp = data
         e = self.energy(tmp)
 
-        for i in range(self.num_iter):
+        for i in range(num_iter):
             tmp = np.sign(self.weights @ tmp)
             e_new = self.energy(tmp)
             if e == e_new:
@@ -33,5 +34,17 @@ class HopfieldNetwork():
             e = e_new
         return tmp
 
-    def async_predict(self, data):
-        pass
+    def async_predict(self, data, num_iter, async_iter):
+        tmp = data
+        e = self.energy(tmp)
+        for i in range(async_iter):
+            for j in range(100):
+                idx = np.random.randint(0, self.neuron_num) 
+                tmp[idx] = np.sign(self.weights[idx].T @ tmp)
+                        
+            e_new = self.energy(tmp)
+            
+            if e == e_new:
+                return tmp
+            e = e_new
+        return tmp
