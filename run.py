@@ -34,11 +34,10 @@ if __name__ == "__main__":
 #     board.run() # UNCOMMENT TO SHOW INTERACTIVE BOARD WITH THE FIRST RESULT
 
     data = read_image_as_vector('./data/big_set/ptak1.jpeg', resize=(80, 60))
-    # print(len(data), np.min(data), np.max(data))
 
     nn = HopfieldNetwork(len(data))
     nn.train([data])
 
     res = []
     res.append(nn.predict(data, 10))
-    # plot(data, data, res)
+    plot(data, data, res, size=(60,80))
