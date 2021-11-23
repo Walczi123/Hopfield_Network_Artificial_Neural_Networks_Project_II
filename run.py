@@ -8,7 +8,9 @@ from ui.board import *
 if __name__ == "__main__":
     STANDARD = True
     USE_ASYNC = False
-    DISTURBED = 100
+    DISTURBED = 200
+    ITER = 1000
+    ASYNC_ITER = 1000
     PATHS = ['./data/sets/small-7x7.csv', './data/sets/large-25x25.csv','./data/big_set/ptak1.jpeg']
     NEURONS = [49, 625, None]
     IDX=1
@@ -33,11 +35,10 @@ if __name__ == "__main__":
         test_data = np.asarray(test_data)
 
         nn = HopfieldNetwork(NEURONS[IDX])
-        # nn.train_oja(train_data,175, 0.0001)
         nn.train(train_data)
         res = []
         for pattern in test_data:
-            res.append(nn.predict(pattern, 10, use_async=USE_ASYNC, async_iter=10))
+            res.append(nn.predict(pattern, ITER, use_async=USE_ASYNC, async_iter=ASYNC_ITER))
         plot(train_data, test_data, res)
 #     board = Board(100, 7)
 #     board.overwrite_board(data_to_array(res[0], (7, 7)))
@@ -50,5 +51,5 @@ if __name__ == "__main__":
 
         res = []
         test = disturb_data(data, DISTURBED)
-        res.append(nn.predict(test, 10))
+        res.append(nn.predict(test, ITER, use_async=USE_ASYNC, async_iter=ASYNC_ITER))
         plot(data, test, res, size=(60,80))
