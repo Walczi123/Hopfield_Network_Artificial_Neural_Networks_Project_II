@@ -13,7 +13,7 @@ class HopfieldNetwork():
             w = w / w.shape[0]
             self.weights = self.weights + w
 
-    def predict(self, data, num_iter, use_async = False, async_iter = 100):
+    def predict(self, data, num_iter, use_async = True, async_iter = 100):
         if use_async:
             return self.sync_predict(data, num_iter)
         else:
