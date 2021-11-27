@@ -27,7 +27,8 @@ class UI(tk.Frame):
         self.board = []
         self.set_board([1],(1,1))
         self.vectors = []
-        self.selected_vector = None
+
+        self.label_loaded = None
 
         self.parent = tk.Tk()
 
@@ -36,7 +37,7 @@ class UI(tk.Frame):
         self.columns = size[1]
         self.board = data_to_array(vector, size) 
         if update:
-            self.update()
+            self.refresh()
 
 
     def init_window(self):
@@ -54,9 +55,13 @@ class UI(tk.Frame):
 
         # self.parent.minsize(screen_width, screen_height)
 
-    def refresh(self, event):
-        xsize = int((event.width-1) / self.columns)
-        ysize = int((event.height-1) / self.rows)
+    def refresh(self, event = None):
+        if event is None:
+            xsize = int((self.canvas.winfo_width()-1) / self.columns)
+            ysize = int((self.canvas.winfo_height()-1) / self.rows)
+        else:
+            xsize = int((event.width-1) / self.columns)
+            ysize = int((event.height-1) / self.rows)
         self.size = min(xsize, ysize)
         
         self.update()
@@ -125,7 +130,7 @@ class UI(tk.Frame):
 
     def predict(self):
         vec = array_to_vector(self.board)
-        vec = self.nn.predict(vec, 10)
+        vec = self.nn.predict(vec, 1)
         self.board = data_to_array(vec, self.board_size)
         self.update()
         print('predicted')
@@ -135,8 +140,11 @@ class UI(tk.Frame):
         if file:
             filepath = os.path.abspath(file.name)
             self.filename = os.path.basename(filepath)
-            label = tk.Label(self.parent, text="The loaded file: " + str(self.filename), font=('Aerial 11'))
-            label.pack(in_=self.top2, side='bottom')   
+            if self.label_loaded is None:
+                self.label_loaded = tk.Label(self.parent, text="The loaded file: " + str(self.filename), font=('Aerial 11'))
+                self.label_loaded.pack(in_=self.top2, side='bottom')   
+            else:
+                self.label_loaded['text']="The loaded file: " + str(self.filename)
             self.vectors = read_data_as_vectors(filepath)
             
             self.vector_cb['values'] = [m for m in range(len(self.vectors))]
@@ -211,7 +219,6 @@ class UI(tk.Frame):
         self.init_window()
         self.draw_top_frame()
         self.pack(side="top", fill="both", expand="true", padx=4, pady=4)
-        self.patterns = ["1", "2", "3"]
         self.draw_bottom_frame()
         # button1 = tk.Button(root, text='Yes', command=lambda:function('Yes'))
         # button1.pack()

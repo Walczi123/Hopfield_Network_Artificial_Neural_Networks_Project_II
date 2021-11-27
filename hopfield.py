@@ -4,7 +4,7 @@ from common.common_functions import vector_deep_copy
 class HopfieldNetwork():     
     def __init__(self, neuron_num):
         self.neuron_num = neuron_num
-        self.weights = np.empty(self.neuron_num)
+        self.weights = np.zeros([self.neuron_num, self.neuron_num])
 
     def train(self, train_data):
         w = np.outer(train_data, train_data)
