@@ -1,0 +1,10 @@
+Disturb test dataset: 10.0 %
+Accuracy: 79.25333333333334 %
+Max iterations: 10
+Data;Accuracy
+0;76.08
+1;82.64
+2;71.04
+3;84.96000000000001
+4;79.60000000000001
+5;81.2
