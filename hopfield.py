@@ -7,14 +7,17 @@ class HopfieldNetwork():
         self.weights = np.empty(self.neuron_num)
 
     def train(self, train_data):
-        for data in train_data:
-            w = np.outer(data, data)
-            diag_w = np.diag(np.diag(w))
-            w = w - diag_w
-            w = w / w.shape[0]
-            self.weights = self.weights + w
+        w = np.outer(train_data, train_data)
+        diag_w = np.diag(np.diag(w))
+        w = w - diag_w
+        w = w / w.shape[0]
+        self.weights = self.weights + w
 
-    def predict(self, data, num_iter, use_async = True, async_iter = 100):
+    def train_dataset(self, train_datas):
+        for data in train_datas:
+            self.train(data)
+
+    def predict(self, data, num_iter, use_async = False, async_iter = 100):
         if not use_async:
             return self.sync_predict(data, num_iter)
         else:
