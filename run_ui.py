@@ -1,4 +1,4 @@
-from ui.ui2 import UI
+from ui.ui_tkinter import UI
 
 if __name__ == "__main__":
     ui = UI()
