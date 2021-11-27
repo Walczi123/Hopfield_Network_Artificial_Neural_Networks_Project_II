@@ -10,6 +10,8 @@ from common.common_functions import data_to_array, read_data_as_vectors
 
 import numpy as np
 
+from hopfield import HopfieldNetwork
+
 class UI(tk.Frame):
     def __init__(self, size=32, color1="white", color2="black"):
         self.size = size
@@ -99,6 +101,29 @@ class UI(tk.Frame):
 
         self.vector_cb.bind('<<ComboboxSelected>>', self.vector_changed)
 
+        bot2 = Frame(self.parent)
+        bot2.pack(side='bottom')
+
+         # Create a Button
+        self.train_button = tk.Button(self.parent, text="Train", command=self.train)
+
+        # label.pack(in_=top, side='left')
+        self.train_button.pack(in_=bot2, side='left') 
+        self.train_button["state"] = "disabled"
+
+         # Create a Button
+        self.predict_button = tk.Button(self.parent, text="Predict", command=self.predict)
+
+        # label.pack(in_=top, side='left')
+        self.predict_button.pack(in_=bot2, side='right')  
+        self.predict_button["state"] = "disabled"
+
+    def train(self):
+        self.nn.train()
+
+    def predict(self):
+        self.nn.predict()
+
     def open_file(self):
         file = filedialog.askopenfile(mode='r', filetypes=[('Prepared vectors sets', '*.csv')])
         if file:
@@ -110,7 +135,11 @@ class UI(tk.Frame):
             
             self.vector_cb['values'] = [m for m in range(len(self.vectors))]
             self.vector_changed(0)
-            # self.selected_vector = 0
+
+            self.train_button["state"] = "normal"
+            self.predict_button["state"] = "normal"
+
+            self.nn = HopfieldNetwork(self.get_size_from_filename(self.filename))
 
     def vector_changed(self, event = None):
         if type(event) is not int:
