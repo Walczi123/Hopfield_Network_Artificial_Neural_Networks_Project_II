@@ -59,3 +59,11 @@ def disturb_data(vec, num=10):
 def vector_deep_copy(vec):
     return [x for x in vec]
     
+def check_accuracy(vector1, vector2):
+    s = 0
+    if len(vector1) != len(vector2):
+        return s
+    for x in range(len(vector1)):
+        if vector1[x] == vector2[x]:
+            s+=1
+    return s
