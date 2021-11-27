@@ -123,12 +123,11 @@ class UI(tk.Frame):
         return any(char.isdigit() for char in inputString)
 
     def get_size_from_filename(self, filename):
-        s = filename.split('.')[0].split('-')[1]
+        s = filename.split('.')[0].split('-')
         for p in s:
             if self.has_numbers(p):
                 res = p.split('x')
-                print('res',res)
-                return (res[0], res[1])
+                return (int(res[0]), int(res[1]))
         raise "invalid file"
 
     def color_field(self, row, col):
