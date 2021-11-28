@@ -36,7 +36,7 @@ if __name__ == "__main__":
         test_data = np.asarray(test_data)
 
         nn = HopfieldNetwork(NEURONS[IDX])
-        nn.train(train_data)
+        nn.train_dataset(train_data)
         if OJA_LEARNING:
             nn.train_oja(train_data,OJA_ITER, OJA_N)
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         data = read_image_as_vector(PATHS[IDX], resize=(80, 60))
 
         nn = HopfieldNetwork(len(data))
-        nn.train([data])
+        nn.train_dataset([data])
         if OJA_LEARNING:
             nn.train_oja([data],OJA_ITER, OJA_N)
 

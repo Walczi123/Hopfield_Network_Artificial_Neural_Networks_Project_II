@@ -60,10 +60,28 @@ def vector_deep_copy(vec):
     return [x for x in vec]
     
 def check_accuracy(vector1, vector2):
-    s = 0
     if len(vector1) != len(vector2):
-        return s
-    for x in range(len(vector1)):
-        if vector1[x] == vector2[x]:
-            s+=1
-    return s
+        return 0
+    vec1 = vector1 + vector2
+    vec = np.where(vec1 != 0)[0]
+    return len(vec)/len(vector1)
+
+    # s = 0
+    # if len(vector1) != len(vector2):
+    #     return s
+    # len_vec = len(vector1)
+    # for x in range(len_vec):
+    #     if vector1[x] == vector2[x]:
+    #         s+=1
+    # return s/len_vec
+
+def has_numbers(self, inputString):
+    return any(char.isdigit() for char in inputString)
+
+def get_size_from_filename(self, filename):
+    s = filename.split('.')[0].split('-')
+    for p in s:
+        if self.has_numbers(p):
+            res = p.split('x')
+            return (int(res[0]), int(res[1]))
+    raise "invalid file"

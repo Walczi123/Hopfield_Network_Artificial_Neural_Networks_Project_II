@@ -6,7 +6,7 @@ from tkinter.constants import NO
 from tkinter.filedialog import askopenfile
 
 from math import floor
-from common.common_functions import array_to_vector, data_to_array, read_data_as_vectors
+from common.common_functions import array_to_vector, data_to_array, get_size_from_filename, read_data_as_vectors
 
 import numpy as np
 
@@ -159,20 +159,9 @@ class UI(tk.Frame):
         if type(event) is not int:
             event = int(self.vector_cb.get())
         self.vector_cb.current(event)
-        self.board_size = self.get_size_from_filename(self.filename)
+        self.board_size = get_size_from_filename(self.filename)
         self.set_board(self.vectors[event],self.board_size,True)
         self.selected_vector = event
-
-    def has_numbers(self, inputString):
-        return any(char.isdigit() for char in inputString)
-
-    def get_size_from_filename(self, filename):
-        s = filename.split('.')[0].split('-')
-        for p in s:
-            if self.has_numbers(p):
-                res = p.split('x')
-                return (int(res[0]), int(res[1]))
-        raise "invalid file"
 
     def color_field(self, row, col):
         field_value = self.board[row][col]
