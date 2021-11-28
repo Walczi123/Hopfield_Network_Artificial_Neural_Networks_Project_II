@@ -69,11 +69,11 @@ class HopfieldNetwork():
             Wprev = self.weights.copy()
             print(f"it: {i}   NORM: {np.linalg.norm(self.weights,2)}")
             for x in train_data:
-                y = self.weights * x
+                y = np.matmul(self.weights, x)
                 # y = np.sign(y)
-                wd = self.weights * y
+                wd = np.matmul(self.weights,y)
                 xd = x - wd
-                d2 = (n*y) * xd
+                d2 = np.outer(n*y,xd)
                 self.weights += d2
                 # for i in range(self.neuron_num):
                 #     for j in range(self.neuron_num):
