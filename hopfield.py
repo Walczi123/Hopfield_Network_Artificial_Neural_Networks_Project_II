@@ -41,8 +41,8 @@ class HopfieldNetwork():
     def async_predict(self, data, num_iter, async_iter):
         tmp = vector_deep_copy(data)
         e = self.energy(tmp)
-        for i in range(async_iter):
-            for j in range(100):
+        for i in range(num_iter):
+            for j in range(async_iter):
                 idx = np.random.randint(0, self.neuron_num) 
                 tmp[idx] = np.sign(self.weights[idx].T @ tmp)
                         
