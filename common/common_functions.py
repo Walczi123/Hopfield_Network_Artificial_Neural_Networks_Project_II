@@ -75,13 +75,13 @@ def check_accuracy(vector1, vector2):
     #         s+=1
     # return s/len_vec
 
-def has_numbers(self, inputString):
+def has_numbers(inputString):
     return any(char.isdigit() for char in inputString)
 
-def get_size_from_filename(self, filename):
+def get_size_from_filename(filename):
     s = filename.split('.')[0].split('-')
     for p in s:
-        if self.has_numbers(p):
+        if has_numbers(p):
             res = p.split('x')
             return (int(res[0]), int(res[1]))
     raise "invalid file"
