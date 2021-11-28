@@ -89,13 +89,14 @@ class HopfieldNetwork():
         self.weights -= np.diag(np.diag(self.weights))
 
 
-    def train_oja2(self, train_data, iter, n):
+    def train_oja2(self, train_data, iter, n): 
         for _ in range(iter):
-            y = self.weights * train_data
+            print(f"NORM: {np.linalg.norm(self.weights,2)}")
+            y = np.matmul(self.weights, train_data)
             # y = np.sign(y)
-            wd = self.weights * y
+            wd = np.matmul(self.weights,y)
             xd = train_data - wd
-            d2 = (n*y) * xd
+            d2 = np.outer(n*y,xd)
             self.weights += d2
 
         self.weights -= np.diag(np.diag(self.weights))
