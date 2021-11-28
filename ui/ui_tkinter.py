@@ -12,6 +12,11 @@ import numpy as np
 
 from hopfield import HopfieldNetwork
 
+#Oja
+
+OJA_ITER = 100
+OJA_RATE = 0.0001
+
 class UI(tk.Frame):
     def __init__(self, size=32, color1="white", color2="black"):
         self.size = size
@@ -110,6 +115,10 @@ class UI(tk.Frame):
         self.reset_button.pack(in_=bot2, side='right')  
         self.reset_button["state"] = "disabled"
 
+        self.train_all_button = tk.Button(self.parent, text="Train all", command=self.train_all)
+        self.train_all_button.pack(in_=bot2, side='left') 
+        self.train_all_button["state"] = "disabled"
+
         self.train_button = tk.Button(self.parent, text="Train", command=self.train)
         self.train_button.pack(in_=bot2, side='left') 
         self.train_button["state"] = "disabled"
@@ -141,11 +150,20 @@ class UI(tk.Frame):
         self.board = data_to_array(arr, self.board_size)
         self.update()
 
+    def train_all(self):
+        for vec in self.vectors:
+            vec = array_to_vector(self.board)
+            self.nn.train(vec)
+            if self.oja:
+                self.nn.train_oja2(vec, OJA_ITER, OJA_RATE)
+        print('trained all')
+
     def train(self):
         vec = array_to_vector(self.board)
         self.nn.train(vec)
         if self.oja:
-            self.nn.train_oja2(vec, 10, 0.7)
+            self.nn.train_oja2(vec, OJA_ITER, OJA_RATE)
+
         print('trained')
 
     def predict(self):
@@ -175,6 +193,7 @@ class UI(tk.Frame):
             self.random_button["state"] = "normal"
             self.oja_cb["state"] = "normal"
             self.reset_button["state"] = "normal"
+            self.train_all_button["state"] = "normal"
 
             self.reset()
             # self.nn = HopfieldNetwork(self.board_size[0]*self.board_size[1])
