@@ -83,5 +83,5 @@ def get_size_from_filename(filename):
     for p in s:
         if has_numbers(p):
             res = p.split('x')
-            return (int(res[0]), int(res[1]))
+            return (int(res[1]), int(res[0]))
     raise "invalid file"

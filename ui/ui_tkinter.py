@@ -29,6 +29,7 @@ class UI(tk.Frame):
         self.vectors = []
 
         self.label_loaded = None
+        self.oja = False
 
         self.parent = tk.Tk()
 
@@ -99,33 +100,52 @@ class UI(tk.Frame):
         self.vector_cb = ttk.Combobox(self.parent, textvariable=self.combobox)
         self.vector_cb['values'] = [m for m in range(len(self.vectors))]
         self.vector_cb['state'] = 'readonly'
-
-        # place the widget
-        # month_cb.pack(fill=tk.X, padx=5, pady=5)
         self.vector_cb.pack(in_=bot, side='left') 
-
         self.vector_cb.bind('<<ComboboxSelected>>', self.vector_changed)
 
         bot2 = Frame(self.parent)
         bot2.pack(side='bottom')
 
-         # Create a Button
-        self.train_button = tk.Button(self.parent, text="Train", command=self.train)
+        self.reset_button = tk.Button(self.parent, text="Reset", command=self.reset)
+        self.reset_button.pack(in_=bot2, side='right')  
+        self.reset_button["state"] = "disabled"
 
-        # label.pack(in_=top, side='left')
+        self.train_button = tk.Button(self.parent, text="Train", command=self.train)
         self.train_button.pack(in_=bot2, side='left') 
         self.train_button["state"] = "disabled"
 
-         # Create a Button
-        self.predict_button = tk.Button(self.parent, text="Predict", command=self.predict)
+        self.checkbox = tk.StringVar()
+        self.oja_cb = ttk.Checkbutton(self.parent, text='Oja',command=self.checkbox_changed, variable=self.checkbox, onvalue=True, offvalue=False)
+        self.oja_cb.pack(in_=bot2, side='right')  
+        self.oja_cb["state"] = "disabled"
 
-        # label.pack(in_=top, side='left')
+        self.random_button = tk.Button(self.parent, text="Random", command=self.random_board)
+        self.random_button.pack(in_=bot2, side='right')  
+        self.random_button["state"] = "disabled"
+
+        self.predict_button = tk.Button(self.parent, text="Predict", command=self.predict)
         self.predict_button.pack(in_=bot2, side='right')  
         self.predict_button["state"] = "disabled"
+
+    def reset(self):
+        self.nn = HopfieldNetwork(self.board_size[0]*self.board_size[1])
+
+    def checkbox_changed(self):
+        if self.checkbox.get():
+            self.oja = True
+        else:
+            self.oja = False
+
+    def random_board(self):
+        arr = np.random.choice([-1, 1], size=self.board_size[0]*self.board_size[1])
+        self.board = data_to_array(arr, self.board_size)
+        self.update()
 
     def train(self):
         vec = array_to_vector(self.board)
         self.nn.train(vec)
+        if self.oja:
+            self.nn.train_oja2(vec, 10, 0.7)
         print('trained')
 
     def predict(self):
@@ -152,8 +172,12 @@ class UI(tk.Frame):
 
             self.train_button["state"] = "normal"
             self.predict_button["state"] = "normal"
+            self.random_button["state"] = "normal"
+            self.oja_cb["state"] = "normal"
+            self.reset_button["state"] = "normal"
 
-            self.nn = HopfieldNetwork(self.board_size[0]*self.board_size[1])
+            self.reset()
+            # self.nn = HopfieldNetwork(self.board_size[0]*self.board_size[1])
 
     def vector_changed(self, event = None):
         if type(event) is not int:
