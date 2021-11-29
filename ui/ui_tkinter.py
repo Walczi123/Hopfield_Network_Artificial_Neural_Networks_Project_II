@@ -152,7 +152,6 @@ class UI(tk.Frame):
 
     def train_all(self):
         for vec in self.vectors:
-            vec = array_to_vector(self.board)
             self.nn.train(vec)
             if self.oja:
                 self.nn.train_oja2(vec, OJA_ITER, OJA_RATE)
