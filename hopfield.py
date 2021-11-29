@@ -17,9 +17,12 @@ class HopfieldNetwork():
         for data in train_datas:
             self.train(data)
 
-    def predict(self, data, num_iter, use_async = False, async_iter = 100):
+    def predict(self, data, num_iter, use_async = False, async_iter = 100, check_cycle = False):
         if not use_async:
-            return self.sync_predict(data, num_iter)
+            if not check_cycle:
+                return self.sync_predict(data, num_iter)[0]
+            else:
+                return self.sync_predict(data, num_iter)
         else:
             return self.async_predict(data, num_iter, async_iter)
 
@@ -29,14 +32,20 @@ class HopfieldNetwork():
     def sync_predict(self, data, num_iter):
         tmp = vector_deep_copy(data)
         e = self.energy(tmp)
-
+        history = [tmp, tmp]
+        cycle = False
         for i in range(num_iter):
             tmp = np.sign(self.weights @ tmp)
+            if list(tmp) == list(history[0]) and i > 0:
+                cycle = True
+            else:
+                history[0] = history[1]
+                history[1] = tmp
             e_new = self.energy(tmp)
             if e == e_new:
-                return tmp
+                return tmp, cycle
             e = e_new
-        return tmp
+        return tmp, cycle
 
     def async_predict(self, data, num_iter, async_iter):
         tmp = vector_deep_copy(data)
