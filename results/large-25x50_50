@@ -1,0 +1,13 @@
+Disturb test dataset: 50.0 %
+Max iterations: 100
+Max async iterations: 100
+Max oja iterations: 100
+Oja learning rate: 1e-06
+					RES			RES_ASYNC			RES_OJA			RES_OJA_ASYNC
+Accuracy:		 50.81 %			52.71 %			50.76 %			52.44 %
+0:					49.52			53.04			49.28			50.08
+1:					51.12			53.28			50.96			52.32
+2:					50.48			50.96			51.12			52.88
+3:					50.4			52.08			50.4			52.8
+4:					51.92			54.08			51.36			53.52
+5:					51.44			52.8			51.44			53.04

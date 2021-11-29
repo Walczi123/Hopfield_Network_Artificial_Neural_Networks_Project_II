@@ -18,12 +18,13 @@ def generate_instances():
     for filepath in glob.glob(PATH_TO_DATASET+'*.csv'):
         data = read_data_as_vectors(filepath)
         nn = HopfieldNetwork(len(data[0]))
-        result.append(Test(nn,data,Path(filepath).stem,0.1, 10, PATH_TO_RESULTS))
+        for i in range(10):
+            result.append(Test(nn,data,Path(filepath).stem,0.1 * i, 0.000001, 100, 100,100, PATH_TO_RESULTS))
     return result
 
 def run_test(test):
     print(f'start of {test.name}')
-    test.start()
+    test.start_all()
 
 
 def run_tests():
