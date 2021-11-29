@@ -50,9 +50,11 @@ class Test:
         self.nn.train_dataset(train_data)
 
         res = []
+        cycles = []
         for pattern in test_data:
-            tmp = self.nn.predict(pattern, self.iters)
-            res.append(check_accuracy(pattern,tmp))
+            tmp = self.nn.predict(pattern, self.iters, check_cycle = True)
+            res.append(check_accuracy(pattern,tmp[0]))
+            cycles.append(tmp[1])
 
         res_async = []
         for pattern in test_data:
@@ -62,16 +64,18 @@ class Test:
         self.nn.train_oja(train_data, self.oja_iters, self.oja_learning_rate)
 
         res_oja = []
+        cycles_oja = []
         for pattern in test_data:
-            tmp = self.nn.predict(pattern, self.iters)
-            res_oja.append(check_accuracy(pattern,tmp))
+            tmp = self.nn.predict(pattern, self.iters, check_cycle = True)
+            res_oja.append(check_accuracy(pattern,tmp[0]))
+            cycles_oja.append(tmp[1])
 
         res_async_oja = []
         for pattern in test_data:
             tmp = self.nn.predict(pattern, self.iters, True, self.async_iters)
             res_async_oja.append(check_accuracy(pattern,tmp))
 
-        self.save_to_file_all(res, res_async, res_oja, res_async_oja)
+        self.save_to_file_all(res, res_async, res_oja, res_async_oja, cycles, cycles_oja)
 
     def cum_res(self, results):
         arr = np.array(results)
@@ -90,7 +94,7 @@ class Test:
         f.writelines(results)
         f.close
 
-    def save_to_file_all(self, results, results_async, results_oja, results_oja_async):
+    def save_to_file_all(self, results, results_async, results_oja, results_oja_async, cycles, cycles_oja):
         path = os.path.join(self.file_path, self.name + f"_{str(int(self.disturb_coeff * 100))}")
         res = [results, results_async, results_oja, results_oja_async]
         f = open(path, "w")
@@ -107,5 +111,11 @@ class Test:
             for j in range(len(res)):
                 if len(res[j]) > i:
                     tmp += f"\t\t\t{str(round(res[j][i] * 100, 2))}"
+                    if j == 0:
+                        if cycles[j]:
+                            tmp += f"\tC"
+                    if j == 2:
+                        if cycles_oja[j]:
+                            tmp += f"\tC"
             f.write(f"{str(i)}:\t\t{tmp}\n")
         f.close
