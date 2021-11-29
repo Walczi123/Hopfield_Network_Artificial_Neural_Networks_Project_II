@@ -6,14 +6,14 @@ from drawing import plot
 from ui.board import *
 
 if __name__ == "__main__":
-    STANDARD = True # DETERMINES IF THE IMAGES (False) OR STANDARD DATASETS (True) SHOULD BE PROCESSED
+    STANDARD = False # DETERMINES IF THE IMAGES (False) OR STANDARD DATASETS (True) SHOULD BE PROCESSED
     USE_ASYNC = False # DETERMINES IF ASYNC PREDICT SHOULD BE USED
     DISTURBED = 10 # NUMBER OF PIXELS THAT SHOULD BE DISTURBED IN TEST IMAGES
     ITER = 100 # NUMBER OF ITERATIONS IN PREDICT
     ASYNC_ITER = 1000 # NUMBER OF ITERATIONS IN ASYNC PREDICT
-    PATHS = ['./data/sets/small-7x7.csv', './data/sets/large-25x25.csv','./data/big_set/ptak1.jpeg'] # PATHS TO IMAGES
+    PATHS = ['./data/sets/small-7x7.csv', './data/sets/large-25x25.csv','./data/big_set/ptak1-266x200.jpg'] # PATHS TO IMAGES
     NEURONS = [49, 625, None] # NUMBER OF NEURONS FOR IMAGES ( SHOULD BE SET APPROPRIATELY TO CORRESPONDING PATH IN PATHS)
-    IDX=0 # INDEX OF ELEMENTS IN PATHS AND NEURONS THAT WILL BE USED
+    IDX=2 # INDEX OF ELEMENTS IN PATHS AND NEURONS THAT WILL BE USED
     STANDARD_TO_OMMIT = [2] # INDICES OF ELEMENTS THAT SHOULD NOT BE TAKEN INTO ACCOUNT
     OJA_LEARNING = False # DETERMINES IF OJA LEARNING SHOULD BE USED
     OJA_ITER = 100 # NUMBER OF ITERATIONS IN OJA LEARNING
@@ -48,7 +48,7 @@ if __name__ == "__main__":
 #     board.overwrite_board(data_to_array(res[0], (7, 7)))
 #     board.run() # UNCOMMENT TO SHOW INTERACTIVE BOARD WITH THE FIRST RESULT
     else:
-        data = read_image_as_vector(PATHS[IDX], resize=(80, 60))
+        data = read_image_as_vector(PATHS[IDX])
 
         nn = HopfieldNetwork(len(data))
         nn.train_dataset([data])
