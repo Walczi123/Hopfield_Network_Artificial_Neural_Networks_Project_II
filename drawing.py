@@ -53,5 +53,5 @@ def plot(data, test, predicted, figsize=(5, 6), size=None):
 
     plt.tight_layout()
     timestr = time.strftime("%d_%m_%Y-%H_%M-%S")
-    plt.savefig(f"result/result-{timestr}.png")
+    plt.savefig(f"results/result-{timestr}.png")
     plt.show()
