@@ -44,14 +44,20 @@ def plot(data, test, predicted, figsize=(5, 6), size=None):
             if len(data) > i:
                 axarr[i, 0].imshow(data[i], cmap='gray_r')
                 axarr[i, 0].axis('off')
+                rect = plt.Rectangle((-.5, -.5), 5, 5, fill=False)
+                axarr[i, 0].add_patch(rect)
             if len(test) > i:
                 axarr[i, 1].imshow(test[i], cmap='gray_r')
                 axarr[i, 1].axis('off')
+                rect = plt.Rectangle((-.5, -.5), 5, 5, fill=False)
+                axarr[i, 1].add_patch(rect)
             if len(predicted) > i:
                 axarr[i, 2].imshow(predicted[i], cmap='gray_r')
                 axarr[i, 2].axis('off')
+                rect = plt.Rectangle((-.5, -.5), 5, 5, fill=False)
+                axarr[i, 2].add_patch(rect)
 
     plt.tight_layout()
     timestr = time.strftime("%d_%m_%Y-%H_%M-%S")
-    plt.savefig(f"result/result-{timestr}.png")
+    plt.savefig(f"results/result-{timestr}.png")
     plt.show()
